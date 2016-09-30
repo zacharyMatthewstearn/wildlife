@@ -13,7 +13,17 @@ public class App {
     String layout = "templates/layout.vtl";
 
     // GET Requests
+    get("/",(request,response)->{
+      return new ModelAndView(createModel(), layout);
+    },new VelocityTemplateEngine());
 
     // POST Requests
+  }
+
+  // Private Methods
+  private static Map<String,Object> createModel() {
+    Map<String,Object> model = new HashMap<>();
+    model.put("template", "templates/index.vtl");
+    return model;
   }
 }
