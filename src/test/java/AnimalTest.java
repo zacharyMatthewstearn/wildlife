@@ -8,4 +8,9 @@ public class AnimalTest {
   public DatabaseRule databaseRule = new DatabaseRule();
 
   // Tests
+  @Test
+  public void constructor_createsAnimal() {
+    Animal testAnimal = new Animal("Mojojojo");
+    assertEquals(true, testAnimal instanceof Animal);
+  }
 }

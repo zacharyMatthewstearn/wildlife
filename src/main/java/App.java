@@ -14,16 +14,25 @@ public class App {
 
     // GET Requests
     get("/",(request,response)->{
-      return new ModelAndView(createModel(), layout);
+      Map<String,Object> model = new HashMap<>();
+      model.put("rangers", Sighting.getAllRangers());
+      model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());
 
     // POST Requests
+    post("/sightings/new",(request,response)->{
+      Map<String,Object> model = new HashMap<>();
+      model.put("modal", request.params("select_ranger")=="new"||request.params("select_animal")=="new"||request.params("select_location")=="new"?true:false);
+      model.put("template", "templates/index.vtl");
+      return new ModelAndView(model, layout);
+    },new VelocityTemplateEngine());
   }
 
   // Private Methods
-  private static Map<String,Object> createModel() {
-    Map<String,Object> model = new HashMap<>();
-    model.put("template", "templates/index.vtl");
-    return model;
-  }
+  // private static Map<String,Object> createModel() {
+  //   Map<String,Object> model = new HashMap<>();
+  //   model.put("template", "templates/index.vtl");
+  //   return model;
+  // }
 }
