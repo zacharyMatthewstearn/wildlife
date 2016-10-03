@@ -8,9 +8,9 @@ public class EndangeredAnimalTest {
   public DatabaseRule databaseRule = new DatabaseRule();
 
   // Tests
-  @Test
-  public void constructor_createsEndangeredAnimal() {
-    EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("Mojojojo!",Constants.HEALTHY,Constants.ADULT);
-    assertEquals(true, testEndangeredAnimal instanceof EndangeredAnimal);
-  }
+  // @Test
+  // public void constructor_createsEndangeredAnimal() {
+  //   EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("Mojojojo!",Constants.HEALTHY,Constants.ADULT);
+  //   assertEquals(true, testEndangeredAnimal instanceof EndangeredAnimal);
+  // }
 }

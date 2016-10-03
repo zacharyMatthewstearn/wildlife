@@ -15,7 +15,7 @@ public class Sighting {
     String columns = "animal_id, location, ranger_name";
     Integer tempAnimalId = (Integer) _animalId;
     String values = tempAnimalId.toString() + ", " + _location + ", " + _rangerName;
-    id = HelperMethods.create(table,columns,values);
+    // id = HelperMethods.create(table,columns,values);
   }
 
   // Getters
@@ -35,11 +35,11 @@ public class Sighting {
   // Setters
   public void setLocation(String _location){
     location = _location;
-    HelperMethods.update("sightings","location",location,id);
+    // HelperMethods.update("sightings","location",location,id);
   }
   public void setRangerName(String _rangerName){
     rangerName = _rangerName;
-    HelperMethods.update("sightings","ranger_name",rangerName,id);
+    // HelperMethods.update("sightings","ranger_name",rangerName,id);
   }
 
   // Overrides

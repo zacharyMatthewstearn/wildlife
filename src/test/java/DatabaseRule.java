@@ -7,11 +7,11 @@ public class DatabaseRule extends ExternalResource {
     DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/wildlife_tracker_test", null, null);
   }
 
-  // @Override
-  // protected void after() {
-  //   try(Connection con = DB.sql2o.open()) {
-  //     con.createQuery("DELETE FROM animals").executeUpdate();
-  //     con.createQuery("DELETE FROM sightings").executeUpdate();
-  //   }
-  // }
+  @Override
+  protected void after() {
+    try(Connection con = DB.sql2o.open()) {
+      con.createQuery("DELETE FROM animals").executeUpdate();
+      con.createQuery("DELETE FROM sightings").executeUpdate();
+    }
+  }
 }

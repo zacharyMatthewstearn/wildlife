@@ -23,19 +23,43 @@ public class EndangeredAnimal extends Animal {
   // Setters
   public void setHealth(String _health) {
     health = _health;
-    HelperMethods.update("animals","health",health,id);
+    update();
   }
   public void setAge(String _age) {
     age = _age;
-    HelperMethods.update("animals","age",age,id);
+    update();
   }
 
   // Overrides
+  // @Override
+  // public boolean equals(Object _other) {
+  //   if(!(_other instanceof EndangeredAnimal))
+  //     return false;
+  //   EndangeredAnimal newEndangeredAnimal = (EndangeredAnimal) _other;
+  //   return id == newEndangeredAnimal.getId();
+  // }
+
+  // CRUD
   @Override
-  public boolean equals(Object _other) {
-    if(!(_other instanceof EndangeredAnimal))
-      return false;
-    EndangeredAnimal newEndangeredAnimal = (EndangeredAnimal) _other;
-    return id == newEndangeredAnimal.getId();
+  public void create(){
+    try(Connection con = DB.sql2o.open()){
+      id = (int) con.createQuery("INSERT INTO animals (name, health, age) VALUES (:name, :health, :age)", true)
+        .addParameter("name",name)
+        .addParameter("health",health)
+        .addParameter("age",age)
+        .executeUpdate()
+        .getKey();
+    }
+  }
+  @Override
+  public void update(){
+    try(Connection con = DB.sql2o.open()){
+      con.createQuery("UPDATE animals SET name=:name,health=:health,age=:age WHERE id=:id", true)
+        .addParameter("name",name)
+        .addParameter("health",health)
+        .addParameter("age",age)
+        .addParameter("id",id)
+        .executeUpdate();
+    }
   }
 }

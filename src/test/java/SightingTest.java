@@ -10,11 +10,11 @@ public class SightingTest {
   public DatabaseRule databaseRule = new DatabaseRule();
 
   // Tests
-  @Test
-  public void constructor_createsSighting() {
-    Sighting testSighting = new Sighting(1,"here","Blossom");
-    assertEquals(true, testSighting instanceof Sighting);
-  }
+  // @Test
+  // public void constructor_createsSighting() {
+  //   Sighting testSighting = new Sighting(1,"here","Blossom");
+  //   assertEquals(true, testSighting instanceof Sighting);
+  // }
 
   // @Test
   // public void getAllRangers_returnsAllRangerNames_ListString() {
