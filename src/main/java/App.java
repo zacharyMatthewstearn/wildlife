@@ -15,7 +15,7 @@ public class App {
     // GET Requests
     get("/",(request,response)->{
       Map<String,Object> model = new HashMap<>();
-      model.put("rangers", Sighting.getAllRangers());
+      model.put("rangers", Sighting.readAllRangers());
       model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());

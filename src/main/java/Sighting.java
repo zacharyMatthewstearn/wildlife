@@ -5,9 +5,9 @@ import org.sql2o.*;
 public class Sighting {
   // Member Variables
   private int id = 0;
-  private int animalId = 0;
+  private int animal_id = 0;
   private String location = "";
-  private String rangerName = "";
+  private String ranger_name = "";
 
   // Constructor
   public Sighting(int _animalId, String _location, String _rangerName) {
@@ -15,7 +15,7 @@ public class Sighting {
     String columns = "animal_id, location, ranger_name";
     Integer tempAnimalId = (Integer) _animalId;
     String values = tempAnimalId.toString() + ", " + _location + ", " + _rangerName;
-    // id = HelperMethods.create(table,columns,values);
+    create();
   }
 
   // Getters
@@ -23,23 +23,23 @@ public class Sighting {
     return id;
   }
   public int getAnimalId(){
-    return animalId;
+    return animal_id;
   }
   public String getLocation(){
     return location;
   }
   public String getRangerName(){
-    return rangerName;
+    return ranger_name;
   }
 
   // Setters
   public void setLocation(String _location){
     location = _location;
-    // HelperMethods.update("sightings","location",location,id);
+    update();
   }
   public void setRangerName(String _rangerName){
-    rangerName = _rangerName;
-    // HelperMethods.update("sightings","ranger_name",rangerName,id);
+    ranger_name = _rangerName;
+    update();
   }
 
   // Overrides
@@ -51,13 +51,57 @@ public class Sighting {
     return id == newSighting.getId();
   }
 
-  // Static Methods
-  public static List<String> getAllRangers() {
-    List<String> temp = new ArrayList<>();
+  // CRUD
+  public void create(){
     try(Connection con = DB.sql2o.open()){
-      temp = con.createQuery("SELECT DISTINCT ranger_name FROM sightings ORDER BY ranger_name ASC")
+      id = (int) con.createQuery("INSERT INTO sightings (animal_id, location, ranger_name) VALUES (:animal_id, :location, :ranger_name)", true)
+        .addParameter("animal_id",animal_id)
+        .addParameter("location",location)
+        .addParameter("ranger_name",ranger_name)
+        .executeUpdate()
+        .getKey();
+    }
+  }
+  public static Sighting readById(int _id){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM sightings WHERE id = :id")
+        .addParameter("id",_id)
+        .executeAndFetchFirst(Sighting.class);
+    }
+  }
+  public static List<Sighting> readAll(){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM sightings")
+        .executeAndFetch(Sighting.class);
+    }
+  }
+  public static List<String> readAllRangers() {
+    try(Connection con = DB.sql2o.open()){
+      return con.createQuery("SELECT DISTINCT ranger_name FROM sightings ORDER BY ranger_name ASC")
       .executeAndFetch(String.class);
     }
-    return temp;
+  }
+  public static List<Sighting> readAllExclusive(){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM animals WHERE health IS NULL AND age IS NULL")
+        .executeAndFetch(Sighting.class);
+    }
+  }
+  public void update(){
+    try(Connection con = DB.sql2o.open()){
+      con.createQuery("UPDATE sightings SET animal_id=:animal_id, location=:location, ranger_name=:ranger_name WHERE id = :id", true)
+        .addParameter("animal_id",animal_id)
+        .addParameter("location",location)
+        .addParameter("ranger_name",ranger_name)
+        .addParameter("id",id)
+        .executeUpdate();
+    }
+  }
+  public void delete(){
+    try(Connection con = DB.sql2o.open()) {
+      con.createQuery("DELETE FROM sightings WHERE id=:id")
+        .addParameter("id",id)
+        .executeUpdate();
+    }
   }
 }
