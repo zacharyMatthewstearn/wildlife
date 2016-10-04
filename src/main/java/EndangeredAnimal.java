@@ -1,3 +1,4 @@
+import java.util.List;
 import org.sql2o.*;
 
 public class EndangeredAnimal extends Animal {
@@ -31,15 +32,16 @@ public class EndangeredAnimal extends Animal {
   }
 
   // Overrides
-  // @Override
-  // public boolean equals(Object _other) {
-  //   if(!(_other instanceof EndangeredAnimal))
-  //     return false;
-  //   EndangeredAnimal newEndangeredAnimal = (EndangeredAnimal) _other;
-  //   return id == newEndangeredAnimal.getId();
-  // }
+  @Override
+  public boolean equals(Object _other) {
+    if(!(_other instanceof EndangeredAnimal))
+      return false;
+    EndangeredAnimal newEndangeredAnimal = (EndangeredAnimal) _other;
+    return id == newEndangeredAnimal.getId();
+  }
 
   // CRUD
+  //// Create
   @Override
   public void create(){
     try(Connection con = DB.sql2o.open()){
@@ -51,6 +53,37 @@ public class EndangeredAnimal extends Animal {
         .getKey();
     }
   }
+  //// Read
+  // @Override
+  public static EndangeredAnimal readById(int _id){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM animals WHERE id = :id")
+        .addParameter("id",_id)
+        .executeAndFetchFirst(EndangeredAnimal.class);
+    }
+  }
+  // @Override
+  public static EndangeredAnimal readByName(String _name){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM animals WHERE name = :name")
+        .addParameter("name",_name)
+        .executeAndFetchFirst(EndangeredAnimal.class);
+    }
+  }
+  // @Override
+  public static List<EndangeredAnimal> readAllEndangered(){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM animals")
+        .executeAndFetch(EndangeredAnimal.class);
+    }
+  }
+  public static List<EndangeredAnimal> readAllEndangeredExclusive(){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT id, name FROM animals WHERE health IS NOT NULL AND age IS NOT NULL")
+        .executeAndFetch(EndangeredAnimal.class);
+    }
+  }
+  //// Update
   @Override
   public void update(){
     try(Connection con = DB.sql2o.open()){
