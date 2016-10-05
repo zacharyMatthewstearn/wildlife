@@ -70,7 +70,7 @@ public class EndangeredAnimal extends Animal {
   }
   public static List<EndangeredAnimal> readAllEndangeredExclusive(){
     try(Connection con = DB.sql2o.open()) {
-      return con.createQuery("SELECT id, name FROM animals WHERE health IS NOT NULL AND age IS NOT NULL")
+      return con.createQuery("SELECT * FROM animals WHERE health IS NOT NULL AND age IS NOT NULL")
         .executeAndFetch(EndangeredAnimal.class);
     }
   }
