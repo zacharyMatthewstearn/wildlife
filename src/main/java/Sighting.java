@@ -1,3 +1,5 @@
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.*;
@@ -8,12 +10,14 @@ public class Sighting {
   private int animal_id = 0;
   private String location = "";
   private String ranger_name = "";
+  private Timestamp time_sighted;
 
   // Constructor
   public Sighting(int _animal_id, String _location, String _ranger_name) {
     animal_id = _animal_id;
     location = _location;
     ranger_name = _ranger_name;
+    time_sighted = new Timestamp(new Date().getTime());
     create();
   }
 

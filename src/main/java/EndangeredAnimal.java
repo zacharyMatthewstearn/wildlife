@@ -11,6 +11,7 @@ public class EndangeredAnimal extends Animal {
     super(_name);
     setHealth(_health);
     setAge(_age);
+    setType("endangered");
   }
 
   // Getters
@@ -45,8 +46,9 @@ public class EndangeredAnimal extends Animal {
   @Override
   public void create(){
     try(Connection con = DB.sql2o.open()){
-      id = (int) con.createQuery("INSERT INTO animals (name, health, age) VALUES (:name, :health, :age)", true)
+      id = (int) con.createQuery("INSERT INTO animals (name, type, health, age) VALUES (:name, :type, :health, :age)", true)
         .addParameter("name",name)
+        .addParameter("type",type)
         .addParameter("health",health)
         .addParameter("age",age)
         .executeUpdate()
@@ -58,6 +60,7 @@ public class EndangeredAnimal extends Animal {
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM animals WHERE id = :id")
         .addParameter("id",_id)
+        .throwOnMappingFailure(false)
         .executeAndFetchFirst(EndangeredAnimal.class);
     }
   }
@@ -65,12 +68,15 @@ public class EndangeredAnimal extends Animal {
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM animals WHERE name = :name")
         .addParameter("name",_name)
+        .throwOnMappingFailure(false)
         .executeAndFetchFirst(EndangeredAnimal.class);
     }
   }
   public static List<EndangeredAnimal> readAllEndangeredExclusive(){
     try(Connection con = DB.sql2o.open()) {
-      return con.createQuery("SELECT * FROM animals WHERE health IS NOT NULL AND age IS NOT NULL")
+      return con.createQuery("SELECT * FROM animals WHERE type = :type")
+        .addParameter("type","endangered")
+        .throwOnMappingFailure(false)
         .executeAndFetch(EndangeredAnimal.class);
     }
   }
@@ -78,8 +84,9 @@ public class EndangeredAnimal extends Animal {
   @Override
   public void update(){
     try(Connection con = DB.sql2o.open()){
-      con.createQuery("UPDATE animals SET name=:name,health=:health,age=:age WHERE id=:id", true)
+      con.createQuery("UPDATE animals SET name=:name,type=:type,health=:health,age=:age WHERE id=:id", true)
         .addParameter("name",name)
+        .addParameter("type",type)
         .addParameter("health",health)
         .addParameter("age",age)
         .addParameter("id",id)
