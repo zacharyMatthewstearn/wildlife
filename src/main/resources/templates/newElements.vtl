@@ -8,21 +8,34 @@
 <div class="container">
   <h1>TEST</h1>
   <!-- FORM -->
-  <form class="form-group" action="/sightings/new" method="post">
+  <form class="form-group" action="/" method="post">
+
     <!-- Ranger Name -->
-    <label for="select_ranger">Who are you?</label>
-
+    #if($newRanger)
+    <label for="input_ranger">Enter your name:</label>
+    <input type="text" id="input_ranger" name="input_ranger" required>
     <br>
+    #end
+
     <!-- Animal Species -->
-    <label for="select_animal">Which Species of animal did you see?</label>
-
+    #if($newAnimal)
+    <label for="input_animal">Enter the species of the animal you saw:</label>
+    <input type="text" id="input_animal" name="input_animal" required>
     <br>
+    <!-- Endangered -->
+    <label for="check_endangered">Is this an endangered species?</label>
+    <input type="checkbox" name="vendangered" value="endangered">
+    <br>
+    #end
+
     <!-- Location -->
-    <label for="select_location">Where did this sighting occur?</label>
-
+    #if($newLocation)
+    <label for="input_location">Enter the location where this sighting occured:</label>
+    <input type="text" id="input_location" name="input_location" required>
     <br>
+    #end
 
-    <input type="submit" name="submit_sighting" value="SUBMIT">
+    <input type="submit" name="submit_newElements" value="SUBMIT">
 
   </form>
 </div>

@@ -36,20 +36,37 @@ public class App {
     },new VelocityTemplateEngine());
 
     // POST Requests
-    post("/sightings/new",(request,response)->{
+    post("/sightings",(request,response)->{
       Map<String,Object> model = new HashMap<>();
       String template = "templates/index.vtl";
-      String selectRangerValue = request.queryParams("select_ranger");
-      String selectAnimalValue = request.queryParams("select_animal");
-      String selectLocationValue = request.queryParams("select_location");
-      if(selectRangerValue.equals("new")||selectAnimalValue.equals("new")||selectLocationValue.equals("new")){
+      Boolean newRanger = request.queryParams("select_ranger").equals("new");
+      Boolean newAnimal = request.queryParams("select_animal").equals("new");
+      Boolean newLocation = request.queryParams("select_location").equals("new");
+      if(newRanger||newAnimal||newLocation){
         template = "templates/newElements.vtl";
+        model.put("newRanger",newRanger);
+        model.put("newAnimal",newAnimal);
+        model.put("newLocation",newLocation);
+      }
+      else{
+        // ADD CODE TO ACTUALLY ADD TO DB
       }
       model.put("rangers", Sighting.readAllRangers());
       model.put("animals", Animal.readAllExclusive());
       model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
       model.put("locations", Sighting.readAllLocations());
       model.put("template", template);
+      return new ModelAndView(model, layout);
+    },new VelocityTemplateEngine());
+
+    post("/",(request,response)->{
+      Map<String,Object> model = new HashMap<>();
+      // ADD CODE TO ACTUALLY ADD TO DB
+      model.put("rangers", Sighting.readAllRangers());
+      model.put("animals", Animal.readAllExclusive());
+      model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
+      model.put("locations", Sighting.readAllLocations());
+      model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());
   }
