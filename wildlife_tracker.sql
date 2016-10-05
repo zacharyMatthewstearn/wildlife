@@ -36,6 +36,7 @@ SET default_with_oids = false;
 CREATE TABLE animals (
     id integer NOT NULL,
     name character varying,
+    type character varying,
     health character varying,
     age character varying
 );
@@ -72,7 +73,8 @@ CREATE TABLE sightings (
     id integer NOT NULL,
     animal_id integer,
     location character varying,
-    ranger_name character varying
+    ranger_name character varying,
+    time_sighted timestamp without time zone
 );
 
 
@@ -117,7 +119,7 @@ ALTER TABLE ONLY sightings ALTER COLUMN id SET DEFAULT nextval('sightings_id_seq
 -- Data for Name: animals; Type: TABLE DATA; Schema: public; Owner: Guest
 --
 
-COPY animals (id, name, health, age) FROM stdin;
+COPY animals (id, name, type, health, age) FROM stdin;
 \.
 
 
@@ -125,14 +127,14 @@ COPY animals (id, name, health, age) FROM stdin;
 -- Name: animals_id_seq; Type: SEQUENCE SET; Schema: public; Owner: Guest
 --
 
-SELECT pg_catalog.setval('animals_id_seq', 1, false);
+SELECT pg_catalog.setval('animals_id_seq', 6, true);
 
 
 --
 -- Data for Name: sightings; Type: TABLE DATA; Schema: public; Owner: Guest
 --
 
-COPY sightings (id, animal_id, location, ranger_name) FROM stdin;
+COPY sightings (id, animal_id, location, ranger_name, time_sighted) FROM stdin;
 \.
 
 

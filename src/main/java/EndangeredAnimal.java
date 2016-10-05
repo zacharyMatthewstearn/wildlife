@@ -9,6 +9,8 @@ public class EndangeredAnimal extends Animal {
   // Constructor
   public EndangeredAnimal(String _name, String _health, String _age) {
     super(_name);
+    if(_name == null || _health == null || _age == null || _name.equals("") || _health.equals("") || _age.equals(""))
+      throw new IllegalArgumentException("Endangered Species REQUIRE values for species name, healht, and age");
     setHealth(_health);
     setAge(_age);
     setType("endangered");

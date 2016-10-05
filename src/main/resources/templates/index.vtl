@@ -6,52 +6,95 @@
 </div>
 
 <div class="container">
-  <!-- FORM -->
-  <form class="form-group" action="/sightings" method="post">
-    <!-- Ranger Name -->
-    <label for="select_ranger">Who are you?</label>
-    <select id="select_ranger" name="select_ranger">
-      <option value="new" selected>NEW ENTRY</option>
-      #if($rangers.size() > 0)
-        #foreach($ranger in $rangers)
-          <option>$ranger</option>
-        #end
-      #end
-    </select>
-    <br>
-    <!-- Animal Species -->
-    <label for="select_animal">Which Species of animal did you see?</label>
-    <select id="select_animal" name="select_animal">
-      <option value="new" selected>NEW ENTRY</option>
-      #if($endangeredAnimals.size() > 0)
-      <optgroup label="Endangered Species">
-        #foreach($endangeredAnimal in $endangeredAnimals)
-          <option>$endangeredAnimal.getName()</option>
-        #end
-      </optgroup>
-      #end
-      #if($animals.size() > 0)
-      <optgroup label="Non-Endangered Species">
-        #foreach($animal in $animals)
-          <option>$animal.getName()</option>
-        #end
-      </optgroup>
-      #end
-    </select>
-    <br>
-    <!-- Location -->
-    <label for="select_location">Where did this sighting occur?</label>
-    <select id="select_location" name="select_location">
-      <option value="new" selected>NEW ENTRY</option>
-      #if($locations.size() > 0)
-        #foreach($location in $locations)
-          <option>$location</option>
-        #end
-      #end
-    </select>
-    <br>
+  <div class="row">
+    <div class="col-md-6">
+      <!-- FORM -->
+      <form class="form-group" action="/sightings" method="post">
+        <!-- Ranger Name -->
+        <label for="select_ranger">Who are you?</label>
+        <select id="select_ranger" name="select_ranger">
+          <option value="new" selected>NEW ENTRY</option>
+          #if($rangers.size() > 0)
+            #foreach($ranger in $rangers)
+              <option>$ranger</option>
+            #end
+          #end
+        </select>
+        <br>
+        <!-- Location -->
+        <label for="select_location">Where did this sighting occur?</label>
+        <select id="select_location" name="select_location">
+          <option value="new" selected>NEW ENTRY</option>
+          #if($locations.size() > 0)
+            #foreach($location in $locations)
+              <option>$location</option>
+            #end
+          #end
+        </select>
+        <br>
+        <!-- Animal Species -->
+        <label for="select_animal">Which Species of animal did you see?</label>
+        <select id="select_animal" name="select_animal">
+          <option value="new" selected>NEW ENTRY</option>
+          #if($endangeredAnimals.size() > 0)
+          <optgroup label="Endangered Species">
+            #foreach($endangeredAnimal in $endangeredAnimals)
+              <option>$endangeredAnimal.getName()</option>
+            #end
+          </optgroup>
+          #end
+          #if($animals.size() > 0)
+          <optgroup label="Non-Endangered Species">
+            #foreach($animal in $animals)
+              <option>$animal.getName()</option>
+            #end
+          </optgroup>
+          #end
+        </select>
+        <br>
+        <!-- Endangered-only -->
+        <h3>IF this IS an endangered species:</h3>
+        <!-- Health -->
+        <label for="select_health">Estimate the health of the animal:</label>
+        <select id="select_health" name="select_health">
+          <option value="" selected disabled>--</option>
+          <option>Healthy</option>
+          <option>Okay</option>
+          <option>Ill</option>
+        </select>
+        <br>
+        <!-- Age -->
+        <label for="select_age">Estimate the age of the animal:</label>
+        <select id="select_age" name="select_age">
+          <option value="" selected disabled>--</option>
+          <option>Adult</option>
+          <option>Young</option>
+          <option>Newborn</option>
+        </select>
+        <br>
 
-    <input type="submit" name="submit_sighting" value="SUBMIT">
+        <input type="submit" name="submit_sighting" value="SUBMIT">
 
-  </form>
+      </form>
+    </div>
+    <div class="col-md-6">
+      #if($sightings.size() > 0)
+        <ul>
+          #foreach($sighting in $sightings)
+            <li>
+              #if($sighting.readAnimal().getType() == "unendangered")
+                <p>$sighting.readAnimal().getName(): unendangered</p>
+              #else
+                <p><strong>$sighting.readAnimal().getName(): ENDANGERED</strong></p>
+                <p>$sighting.readAnimal().getAge(), $sighting.readAnimal().getHealth()</p>
+              #end
+              <p>$sighting.getLocation(), $sighting.getTimeSighted()</p>
+              <p>$sighting.getRangerName()</p>
+            </li>
+          #end
+        </ul>
+      #end
+    </div>
+  </div>
+
 </div>

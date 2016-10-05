@@ -3,6 +3,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.*;
+import java.text.SimpleDateFormat;
 
 public class Sighting {
   // Member Variables
@@ -34,6 +35,12 @@ public class Sighting {
   public String getRangerName(){
     return ranger_name;
   }
+  public String getTimeSighted(){
+    String pattern = "MM/dd/yyyy HH:mm:ss";
+    SimpleDateFormat format = new SimpleDateFormat(pattern);
+    System.out.println("Output: " + time_sighted);
+    return format.format(time_sighted);
+  }
 
   // Setters
   public void setLocation(String _location){
@@ -57,10 +64,11 @@ public class Sighting {
   // CRUD
   public void create(){
     try(Connection con = DB.sql2o.open()){
-      id = (int) con.createQuery("INSERT INTO sightings (animal_id, location, ranger_name) VALUES (:animal_id, :location, :ranger_name)", true)
+      id = (int) con.createQuery("INSERT INTO sightings (animal_id, location, ranger_name, time_sighted) VALUES (:animal_id, :location, :ranger_name, :time_sighted)", true)
         .addParameter("animal_id",animal_id)
         .addParameter("location",location)
         .addParameter("ranger_name",ranger_name)
+        .addParameter("time_sighted",time_sighted)
         .executeUpdate()
         .getKey();
     }
@@ -69,30 +77,43 @@ public class Sighting {
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM sightings WHERE id = :id")
         .addParameter("id",_id)
+        .throwOnMappingFailure(false)
         .executeAndFetchFirst(Sighting.class);
+    }
+  }
+  public Animal readAnimal(){
+    try(Connection con = DB.sql2o.open()) {
+      return con.createQuery("SELECT * FROM animals WHERE id = :id")
+        .addParameter("id",animal_id)
+        .throwOnMappingFailure(false)
+        .executeAndFetchFirst(Animal.class);
     }
   }
   public static List<Sighting> readAll(){
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM sightings")
+        .throwOnMappingFailure(false)
         .executeAndFetch(Sighting.class);
     }
   }
   public static List<String> readAllRangers() {
     try(Connection con = DB.sql2o.open()){
       return con.createQuery("SELECT DISTINCT ranger_name FROM sightings ORDER BY ranger_name ASC")
+      .throwOnMappingFailure(false)
       .executeAndFetch(String.class);
     }
   }
   public static List<String> readAllLocations() {
     try(Connection con = DB.sql2o.open()){
       return con.createQuery("SELECT DISTINCT location FROM sightings ORDER BY location ASC")
+      .throwOnMappingFailure(false)
       .executeAndFetch(String.class);
     }
   }
   public static List<Sighting> readAllExclusive(){
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM animals WHERE health IS NULL AND age IS NULL")
+        .throwOnMappingFailure(false)
         .executeAndFetch(Sighting.class);
     }
   }

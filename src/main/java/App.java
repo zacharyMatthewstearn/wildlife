@@ -14,14 +14,14 @@ public class App {
 
     //////////////////////////////////////
     // TEST
-    try(Connection con = DB.sql2o.open()){
-      con.createQuery("DELETE FROM sightings *").executeUpdate();
-      con.createQuery("DELETE FROM animals *").executeUpdate();
-    }
-    Animal testAnimal = new Animal("testAnimal");
-    EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("testEndangeredAnimal","testHealth","testAge");
-    Sighting testSighting1 = new Sighting(testAnimal.getId(),"testLocation1","testRangerName1");
-    Sighting testSighting2 = new Sighting(testEndangeredAnimal.getId(),"testLocation2","testRangerName2");
+    // try(Connection con = DB.sql2o.open()){
+    //   con.createQuery("DELETE FROM sightings *").executeUpdate();
+    //   con.createQuery("DELETE FROM animals *").executeUpdate();
+    // }
+    // Animal testAnimal = new Animal("testAnimal");
+    // EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("testEndangeredAnimal","testHealth","testAge");
+    // Sighting testSighting1 = new Sighting(testAnimal.getId(),"testLocation1","testRangerName1");
+    // Sighting testSighting2 = new Sighting(testEndangeredAnimal.getId(),"testLocation2","testRangerName2");
     //////////////////////////////////////
 
     // GET Requests
@@ -31,6 +31,7 @@ public class App {
       model.put("animals", Animal.readAllExclusive());
       model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
       model.put("locations", Sighting.readAllLocations());
+      model.put("sightings", Sighting.readAll());
       model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());
@@ -50,31 +51,57 @@ public class App {
       }
       else{
         // ADD CODE TO ACTUALLY ADD TO DB
+        Sighting newSighting = new Sighting(Animal.readByName(request.queryParams("select_animal")).getId(),request.queryParams("select_location"),request.queryParams("select_ranger"));
       }
-      model.put("rangers", Sighting.readAllRangers());
-      model.put("animals", Animal.readAllExclusive());
-      model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
-      model.put("locations", Sighting.readAllLocations());
-      model.put("template", template);
-      return new ModelAndView(model, layout);
-    },new VelocityTemplateEngine());
+      response.redirect("/");
+      return "Success!";
+    //   model.put("rangers", Sighting.readAllRangers());
+    //   model.put("animals", Animal.readAllExclusive());
+    //   model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
+    //   model.put("locations", Sighting.readAllLocations());
+    //   model.put("Animal", Animal.class);
+    //   model.put("template", template);
+    //   return new ModelAndView(model, layout);
+    // },new VelocityTemplateEngine());
+    });
 
     post("/",(request,response)->{
-      Map<String,Object> model = new HashMap<>();
-      // ADD CODE TO ACTUALLY ADD TO DB
-      // if(request.queryParams("check_endangered").equals("endangered")){
-      //   try()
-      //   EndangeredAnimal newEndangeredAnimal = new EndangeredAnimal();
-      // }
-
-      model.put("rangers", Sighting.readAllRangers());
-      model.put("animals", Animal.readAllExclusive());
-      model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
-      model.put("locations", Sighting.readAllLocations());
-      model.put("template", "templates/index.vtl");
-      return new ModelAndView(model, layout);
-    },new VelocityTemplateEngine());
+      String newSpeciesName = request.queryParams("input_animal");
+      String newSpeciesHealth = request.queryParams("select_health");
+      String newSpeciesAge = request.queryParams("select_age");
+      if(request.queryParams("check_endangered") != null){
+        try{
+          EndangeredAnimal newEndangeredAnimal = new EndangeredAnimal(newSpeciesName,newSpeciesHealth,newSpeciesAge);
+        }
+        catch(IllegalArgumentException exception){
+          return "When attempting to add an endangered species to the database, you MUST include information on the specimen's health and age at the time of sighting";
+        }
+      }
+      try(Connection con = DB.sql2o.open()){
+        String addSpecies = "INSERT INTO animals (name, type, health, age) VALUES (:name, :type, :health, :age)";
+        String type = "unendangered";
+        if(request.queryParams("check_endangered") != null)
+          type = "endangered";
+        int newAnimalId = (int) con.createQuery(addSpecies,true)
+          .addParameter("name",newSpeciesName)
+          .addParameter("type",type)
+          .addParameter("health",newSpeciesHealth)
+          .addParameter("age",newSpeciesAge)
+          .executeUpdate()
+          .getKey();
+        Sighting newSighting = new Sighting(newAnimalId,request.queryParams("input_location"),request.queryParams("input_ranger"));
+        // String addSighting = "INSERT INTO sightings (animal_id, location, ranger_name) VALUES (:animal_id, :location, :ranger_name)";
+        // con.createQuery(addSighting,true)
+        //   .addParameter("animal_id",newAnimalId)
+        //   .addParameter("location",request.queryParams("input_location"))
+        //   .addParameter("ranger_name",request.queryParams("input_ranger"))
+        //   .executeUpdate();
+      }
+      response.redirect("/");
+      return "Success!";
+    });
   }
+
 
 
 }
