@@ -38,20 +38,21 @@ public class App {
     // POST Requests
     post("/sightings/new",(request,response)->{
       Map<String,Object> model = new HashMap<>();
-      model.put("modal", request.params("select_ranger")=="new"||request.params("select_animal")=="new"||request.params("select_location")=="new"?true:false);
+      String template = "templates/index.vtl";
+      String selectRangerValue = request.queryParams("select_ranger");
+      String selectAnimalValue = request.queryParams("select_animal");
+      String selectLocationValue = request.queryParams("select_location");
+      if(selectRangerValue.equals("new")||selectAnimalValue.equals("new")||selectLocationValue.equals("new")){
+        template = "templates/newElements.vtl";
+      }
       model.put("rangers", Sighting.readAllRangers());
       model.put("animals", Animal.readAllExclusive());
       model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
       model.put("locations", Sighting.readAllLocations());
-      model.put("template", "templates/index.vtl");
+      model.put("template", template);
       return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());
   }
 
-  // Private Methods
-  // private static Map<String,Object> createModel() {
-  //   Map<String,Object> model = new HashMap<>();
-  //   model.put("template", "templates/index.vtl");
-  //   return model;
-  // }
+
 }
