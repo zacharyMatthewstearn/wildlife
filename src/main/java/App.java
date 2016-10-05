@@ -62,6 +62,11 @@ public class App {
     post("/",(request,response)->{
       Map<String,Object> model = new HashMap<>();
       // ADD CODE TO ACTUALLY ADD TO DB
+      // if(request.queryParams("check_endangered").equals("endangered")){
+      //   try()
+      //   EndangeredAnimal newEndangeredAnimal = new EndangeredAnimal();
+      // }
+
       model.put("rangers", Sighting.readAllRangers());
       model.put("animals", Animal.readAllExclusive());
       model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());

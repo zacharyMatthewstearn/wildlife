@@ -6,7 +6,7 @@
 </div>
 
 <div class="container">
-  <h1>TEST</h1>
+  <h1>Enter new information:</h1>
   <!-- FORM -->
   <form class="form-group" action="/" method="post">
 
@@ -17,6 +17,13 @@
     <br>
     #end
 
+    <!-- Location -->
+    #if($newLocation)
+    <label for="input_location">Enter the location where this sighting occured:</label>
+    <input type="text" id="input_location" name="input_location" required>
+    <br>
+    #end
+
     <!-- Animal Species -->
     #if($newAnimal)
     <label for="input_animal">Enter the species of the animal you saw:</label>
@@ -24,14 +31,27 @@
     <br>
     <!-- Endangered -->
     <label for="check_endangered">Is this an endangered species?</label>
-    <input type="checkbox" name="vendangered" value="endangered">
+    <input type="checkbox" id="check_endangered" name="check_endangered" value="endangered">
     <br>
-    #end
-
-    <!-- Location -->
-    #if($newLocation)
-    <label for="input_location">Enter the location where this sighting occured:</label>
-    <input type="text" id="input_location" name="input_location" required>
+    <!-- Endangered-only -->
+    <h3>IF this IS an endangered species:</h3>
+    <!-- Health -->
+    <label for="select_health">Estimate the health of the animal:</label>
+    <select id="select_health" name="select_health">
+      <option value="" selected disabled>--</option>
+      <option>Constants.HEALTHY</option>
+      <option>Constants.OKAY</option>
+      <option>Constants.ILL</option>
+    </select>
+    <br>
+    <!-- Age -->
+    <label for="select_age">Estimate the age of the animal:</label>
+    <select id="select_age" name="select_age">
+      <option value="" selected disabled>--</option>
+      <option>Constants.ADULT</option>
+      <option>Constants.YOUNG</option>
+      <option>Constants.NEWBORN</option>
+    </select>
     <br>
     #end
 
