@@ -12,10 +12,22 @@ public class App {
     staticFileLocation("/public");
     String layout = "templates/layout.vtl";
 
+    try(Connection con = DB.sql2o.open()){
+      con.createQuery("DELETE FROM sightings *").executeUpdate();
+      con.createQuery("DELETE FROM animals *").executeUpdate();
+    }
+    Animal testAnimal = new Animal("testAnimal");
+    EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("testEndangeredAnimal","testHealth","testAge");
+    Sighting testSighting1 = new Sighting(testAnimal.getId(),"testLocation1","testRangerName1");
+    Sighting testSighting2 = new Sighting(testEndangeredAnimal.getId(),"testLocation2","testRangerName2");
+
     // GET Requests
     get("/",(request,response)->{
       Map<String,Object> model = new HashMap<>();
       model.put("rangers", Sighting.readAllRangers());
+      model.put("animals", Animal.readAllExclusive());
+      model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
+      model.put("locations", Sighting.readAllLocations());
       model.put("template", "templates/index.vtl");
       return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());

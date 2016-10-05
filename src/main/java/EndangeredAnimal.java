@@ -3,8 +3,8 @@ import org.sql2o.*;
 
 public class EndangeredAnimal extends Animal {
   // Member Variables
-  private String health = "";
-  private String age = "";
+  private String health;
+  private String age;
 
   // Constructor
   public EndangeredAnimal(String _name, String _health, String _age) {
@@ -54,7 +54,6 @@ public class EndangeredAnimal extends Animal {
     }
   }
   //// Read
-  // @Override
   public static EndangeredAnimal readById(int _id){
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM animals WHERE id = :id")
@@ -62,19 +61,11 @@ public class EndangeredAnimal extends Animal {
         .executeAndFetchFirst(EndangeredAnimal.class);
     }
   }
-  // @Override
   public static EndangeredAnimal readByName(String _name){
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM animals WHERE name = :name")
         .addParameter("name",_name)
         .executeAndFetchFirst(EndangeredAnimal.class);
-    }
-  }
-  // @Override
-  public static List<EndangeredAnimal> readAllEndangered(){
-    try(Connection con = DB.sql2o.open()) {
-      return con.createQuery("SELECT * FROM animals")
-        .executeAndFetch(EndangeredAnimal.class);
     }
   }
   public static List<EndangeredAnimal> readAllEndangeredExclusive(){

@@ -43,15 +43,6 @@ public class EndangeredAnimalTest {
     assertEquals(true,testEndangeredAnimal.equals(EndangeredAnimal.readByName(testEndangeredAnimal.getName())));
   }
   @Test
-  public void readAllEndangered_returnsAllEndangeredAnimals_ListEndangeredAnimal() {
-    List<EndangeredAnimal> expectedOutput = new ArrayList<>();
-    EndangeredAnimal testEndangeredAnimal1 = new EndangeredAnimal("Mojojojo","test","test");
-    EndangeredAnimal testEndangeredAnimal2 = new EndangeredAnimal("Mojojojojojo","test","test");
-    expectedOutput.add(testEndangeredAnimal1);
-    expectedOutput.add(testEndangeredAnimal2);
-    assertEquals(expectedOutput,EndangeredAnimal.readAllEndangered());
-  }
-  @Test
   public void readAllEndangeredExclusive_returnsAllEndangeredAnimals_ListEndangeredAnimal() {
     List<EndangeredAnimal> expectedOutput = new ArrayList<>();
     EndangeredAnimal testEndangeredAnimal1 = new EndangeredAnimal("Mojojojo","test","test");

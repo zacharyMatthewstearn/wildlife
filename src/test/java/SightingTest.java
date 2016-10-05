@@ -46,6 +46,24 @@ public class SightingTest {
     expectedOutput.add(testSighting2);
     assertEquals(expectedOutput,Sighting.readAll());
   }
+  @Test
+  public void readAllRangers_returnsAllRangers_ListString() {
+    List<String> expectedOutput = new ArrayList<>();
+    Sighting testSighting1 = new Sighting(1,"here","Mojojojo");
+    Sighting testSighting2 = new Sighting(1,"here","Mojojojojojo");
+    expectedOutput.add(testSighting1.getRangerName());
+    expectedOutput.add(testSighting2.getRangerName());
+    assertEquals(expectedOutput,Sighting.readAllRangers());
+  }
+  @Test
+  public void readAllLocations_returnsAllLocations_ListString() {
+    List<String> expectedOutput = new ArrayList<>();
+    Sighting testSighting1 = new Sighting(1,"here1","Mojojojo");
+    Sighting testSighting2 = new Sighting(1,"here2","Mojojojojojo");
+    expectedOutput.add(testSighting1.getLocation());
+    expectedOutput.add(testSighting2.getLocation());
+    assertEquals(expectedOutput,Sighting.readAllLocations());
+  }
 
   //// Update (via setName)
   @Test
@@ -63,4 +81,6 @@ public class SightingTest {
     testSighting.delete();
     assertEquals(0,Sighting.readAll().size());
   }
+
+
 }

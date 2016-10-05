@@ -4,7 +4,7 @@ import org.sql2o.*;
 public class Animal{
   // Member Variables
   protected int id = 0;
-  protected String name = "";
+  protected String name;
 
   // Constructor
   public Animal(String _name){

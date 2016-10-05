@@ -1,57 +1,63 @@
-<h1>TEST</h1>
+<!-- JUMBOTRON -->
+<div class="jumbotron">
+  <div class="container">
+    <h1>Wildlife Tracker</h1>
+  </div>
+</div>
 
-<!-- FORM -->
-<form class="form-group" action="/sightings/new" method="post">
-  <!-- Ranger Name -->
-  <label for="select_ranger">Who are you?</label>
-  <select id="select_ranger" name="select_ranger">
-    <option value="new" selected>NEW ENTRY</option>
-    #if($rangers.size() > 0)
-      #foreach($ranger in $rangers)
-        <option>$ranger.getName()</option>
+<div class="container">
+  <!-- FORM -->
+  <form class="form-group" action="/sightings/new" method="post">
+    <!-- Ranger Name -->
+    <label for="select_ranger">Who are you?</label>
+    <select id="select_ranger" name="select_ranger">
+      <option value="new" selected>NEW ENTRY</option>
+      #if($rangers.size() > 0)
+        #foreach($ranger in $rangers)
+          <option>$ranger</option>
+        #end
       #end
-    #end
-  </select>
-  <br>
-  <!-- Animal Species -->
-  <label for="select_animal">Which Species of animal did you see?</label>
-  <select id="select_animal" name="select_animal">
-    <option value="new" selected>NEW ENTRY</option>
-    #if($endangeredAnimals.size() > 0)
-    <optgroup label="Endangered Species">
-      #foreach($endangeredAnimal in $endangeredAnimals)
-        <option>$endangeredAnimal.getName()</option>
+    </select>
+    <br>
+    <!-- Animal Species -->
+    <label for="select_animal">Which Species of animal did you see?</label>
+    <select id="select_animal" name="select_animal">
+      <option value="new" selected>NEW ENTRY</option>
+      #if($endangeredAnimals.size() > 0)
+      <optgroup label="Endangered Species">
+        #foreach($endangeredAnimal in $endangeredAnimals)
+          <option>$endangeredAnimal.getName()</option>
+        #end
+      </optgroup>
       #end
-    </optgroup>
-    #end
-    #if($animals.size() > 0)
-    <optgroup label="Non-Endangered Species">
-      #foreach($animal in $animals)
-        <option>$animal.getName()</option>
+      #if($animals.size() > 0)
+      <optgroup label="Non-Endangered Species">
+        #foreach($animal in $animals)
+          <option>$animal.getName()</option>
+        #end
+      </optgroup>
       #end
-    </optgroup>
-    #end
-  </select>
-  <br>
-  <!-- Location -->
-  <label for="select_location">Where did this sighting occur?</label>
-  <select id="select_location" name="select_location">
-    <option value="new" selected>NEW ENTRY</option>
-    #if($locations.size() > 0)
-      #foreach($location in $locations)
-        <option>$location.getName()</option>
+    </select>
+    <br>
+    <!-- Location -->
+    <label for="select_location">Where did this sighting occur?</label>
+    <select id="select_location" name="select_location">
+      <option value="new" selected>NEW ENTRY</option>
+      #if($locations.size() > 0)
+        #foreach($location in $locations)
+          <option>$location</option>
+        #end
       #end
-    #end
-  </select>
-  <br>
+    </select>
+    <br>
 
-  #if($modal)
-    <input type="submit" name="submit_sighting" value="SUBMIT" data-toggle="modal">
-  #else
-    <input type="submit" name="submit_sighting" value="SUBMIT">
-  #end
-</form>
-
+    #if($modal)
+      <input type="submit" name="submit_sighting" value="SUBMIT" data-toggle="modal">
+    #else
+      <input type="submit" name="submit_sighting" value="SUBMIT">
+    #end
+  </form>
+</div>
 <!-- MODAL -->
 #if($modal)
 <div id="popup" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

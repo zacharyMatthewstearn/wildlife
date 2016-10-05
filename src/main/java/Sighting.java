@@ -10,11 +10,10 @@ public class Sighting {
   private String ranger_name = "";
 
   // Constructor
-  public Sighting(int _animalId, String _location, String _rangerName) {
-    String table = "sightings";
-    String columns = "animal_id, location, ranger_name";
-    Integer tempAnimalId = (Integer) _animalId;
-    String values = tempAnimalId.toString() + ", " + _location + ", " + _rangerName;
+  public Sighting(int _animal_id, String _location, String _ranger_name) {
+    animal_id = _animal_id;
+    location = _location;
+    ranger_name = _ranger_name;
     create();
   }
 
@@ -78,6 +77,12 @@ public class Sighting {
   public static List<String> readAllRangers() {
     try(Connection con = DB.sql2o.open()){
       return con.createQuery("SELECT DISTINCT ranger_name FROM sightings ORDER BY ranger_name ASC")
+      .executeAndFetch(String.class);
+    }
+  }
+  public static List<String> readAllLocations() {
+    try(Connection con = DB.sql2o.open()){
+      return con.createQuery("SELECT DISTINCT location FROM sightings ORDER BY location ASC")
       .executeAndFetch(String.class);
     }
   }
