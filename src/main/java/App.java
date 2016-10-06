@@ -26,9 +26,11 @@ public class App {
 
     get("/sightings/new",(request,response)->{
       Map<String,Object> model = new HashMap<>();
-      // model.put("newRanger",newRanger);
-      // model.put("newAnimal",newAnimal);
-      // model.put("newLocation",newLocation);
+
+      model.put("newRanger",request.session().attribute("newRanger"));
+      model.put("newAnimal",request.session().attribute("newAnimal"));
+      model.put("newLocation",request.session().attribute("newLocation"));
+
       model.put("rangers", Sighting.readAllRangers());
       model.put("animals", Animal.readAllExclusive());
       model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
@@ -50,6 +52,9 @@ public class App {
         model.put("newRanger",newRanger);
         model.put("newAnimal",newAnimal);
         model.put("newLocation",newLocation);
+        request.session().attribute("newRanger", newRanger);
+        request.session().attribute("newAnimal", newAnimal);
+        request.session().attribute("newLocation", newLocation);
         // model.put("rangers", Sighting.readAllRangers());
         // model.put("animals", Animal.readAllExclusive());
         // model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
