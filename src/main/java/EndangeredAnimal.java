@@ -14,6 +14,7 @@ public class EndangeredAnimal extends Animal {
     setHealth(_health);
     setAge(_age);
     setType("endangered");
+    update();
   }
 
   // Getters
@@ -27,11 +28,11 @@ public class EndangeredAnimal extends Animal {
   // Setters
   public void setHealth(String _health) {
     health = _health;
-    update();
+    // update();
   }
   public void setAge(String _age) {
     age = _age;
-    update();
+    // update();
   }
 
   // Overrides

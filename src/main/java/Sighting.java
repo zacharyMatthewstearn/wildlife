@@ -45,11 +45,11 @@ public class Sighting {
   // Setters
   public void setLocation(String _location){
     location = _location;
-    update();
+    // update();
   }
   public void setRangerName(String _rangerName){
     ranger_name = _rangerName;
-    update();
+    // update();
   }
 
   // Overrides
@@ -83,10 +83,22 @@ public class Sighting {
   }
   public Animal readAnimal(){
     try(Connection con = DB.sql2o.open()) {
-      return con.createQuery("SELECT * FROM animals WHERE id = :id")
+      try{
+        EndangeredAnimal newEndangeredAnimal = (EndangeredAnimal)
+        con.createQuery("SELECT * FROM animals WHERE id = :id")
+        .addParameter("id",animal_id)
+        .throwOnMappingFailure(false)
+        .executeAndFetchFirst(EndangeredAnimal.class);
+        return newEndangeredAnimal;
+      }
+      catch(IllegalArgumentException exception){
+        Animal newAnimal = (Animal)
+        con.createQuery("SELECT * FROM animals WHERE id = :id")
         .addParameter("id",animal_id)
         .throwOnMappingFailure(false)
         .executeAndFetchFirst(Animal.class);
+        return newAnimal;
+      }
     }
   }
   public static List<Sighting> readAll(){

@@ -27,11 +27,11 @@ public class Animal{
   // Setters
   public void setName(String _name){
     name = _name;
-    update();
+    // update();
   }
   public void setType(String _type){
     type = _type;
-    update();
+    // update();
   }
 
   // Overrides

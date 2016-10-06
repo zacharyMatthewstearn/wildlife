@@ -48,22 +48,20 @@ public class App {
         model.put("newRanger",newRanger);
         model.put("newAnimal",newAnimal);
         model.put("newLocation",newLocation);
+        model.put("rangers", Sighting.readAllRangers());
+        model.put("animals", Animal.readAllExclusive());
+        model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
+        model.put("locations", Sighting.readAllLocations());
+        model.put("Animal", Animal.class);
+        model.put("template", template);
       }
       else{
         // ADD CODE TO ACTUALLY ADD TO DB
         Sighting newSighting = new Sighting(Animal.readByName(request.queryParams("select_animal")).getId(),request.queryParams("select_location"),request.queryParams("select_ranger"));
+        response.redirect("/");
       }
-      response.redirect("/");
-      return "Success!";
-    //   model.put("rangers", Sighting.readAllRangers());
-    //   model.put("animals", Animal.readAllExclusive());
-    //   model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
-    //   model.put("locations", Sighting.readAllLocations());
-    //   model.put("Animal", Animal.class);
-    //   model.put("template", template);
-    //   return new ModelAndView(model, layout);
-    // },new VelocityTemplateEngine());
-    });
+      return new ModelAndView(model, layout);
+    },new VelocityTemplateEngine());
 
     post("/",(request,response)->{
       String newSpeciesName = request.queryParams("input_animal");

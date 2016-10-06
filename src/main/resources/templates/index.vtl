@@ -82,7 +82,7 @@
         <ul>
           #foreach($sighting in $sightings)
             <li>
-              #if($sighting.readAnimal().getType() == "unendangered")
+              #if($sighting.readAnimal().getType().equals("unendangered"))
                 <p>$sighting.readAnimal().getName(): unendangered</p>
               #else
                 <p><strong>$sighting.readAnimal().getName(): ENDANGERED</strong></p>

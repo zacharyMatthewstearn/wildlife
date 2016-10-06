@@ -10,14 +10,14 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -30,7 +30,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: animals; Type: TABLE; Schema: public; Owner: Guest; Tablespace: 
+-- Name: animals; Type: TABLE; Schema: public; Owner: Guest; Tablespace:
 --
 
 CREATE TABLE animals (
@@ -66,7 +66,7 @@ ALTER SEQUENCE animals_id_seq OWNED BY animals.id;
 
 
 --
--- Name: sightings; Type: TABLE; Schema: public; Owner: Guest; Tablespace: 
+-- Name: sightings; Type: TABLE; Schema: public; Owner: Guest; Tablespace:
 --
 
 CREATE TABLE sightings (
@@ -146,7 +146,7 @@ SELECT pg_catalog.setval('sightings_id_seq', 1, false);
 
 
 --
--- Name: animals_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace: 
+-- Name: animals_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace:
 --
 
 ALTER TABLE ONLY animals
@@ -154,7 +154,7 @@ ALTER TABLE ONLY animals
 
 
 --
--- Name: sightings_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace: 
+-- Name: sightings_pkey; Type: CONSTRAINT; Schema: public; Owner: Guest; Tablespace:
 --
 
 ALTER TABLE ONLY sightings
@@ -174,4 +174,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
-
