@@ -28,11 +28,9 @@ public class EndangeredAnimal extends Animal {
   // Setters
   public void setHealth(String _health) {
     health = _health;
-    // update();
   }
   public void setAge(String _age) {
     age = _age;
-    // update();
   }
 
   // Overrides

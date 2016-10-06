@@ -12,18 +12,6 @@ public class App {
     staticFileLocation("/public");
     String layout = "templates/layout.vtl";
 
-    //////////////////////////////////////
-    // TEST
-    // try(Connection con = DB.sql2o.open()){
-    //   con.createQuery("DELETE FROM sightings *").executeUpdate();
-    //   con.createQuery("DELETE FROM animals *").executeUpdate();
-    // }
-    // Animal testAnimal = new Animal("testAnimal");
-    // EndangeredAnimal testEndangeredAnimal = new EndangeredAnimal("testEndangeredAnimal","testHealth","testAge");
-    // Sighting testSighting1 = new Sighting(testAnimal.getId(),"testLocation1","testRangerName1");
-    // Sighting testSighting2 = new Sighting(testEndangeredAnimal.getId(),"testLocation2","testRangerName2");
-    //////////////////////////////////////
-
     // GET Requests
     get("/",(request,response)->{
       Map<String,Object> model = new HashMap<>();
@@ -36,6 +24,19 @@ public class App {
       return new ModelAndView(model, layout);
     },new VelocityTemplateEngine());
 
+    get("/sightings/new",(request,response)->{
+      Map<String,Object> model = new HashMap<>();
+      // model.put("newRanger",newRanger);
+      // model.put("newAnimal",newAnimal);
+      // model.put("newLocation",newLocation);
+      model.put("rangers", Sighting.readAllRangers());
+      model.put("animals", Animal.readAllExclusive());
+      model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
+      model.put("locations", Sighting.readAllLocations());
+      model.put("template", "templates/newElements.vtl");
+      return new ModelAndView(model, layout);
+    },new VelocityTemplateEngine());
+
     // POST Requests
     post("/sightings/new",(request,response)->{ // On hitting SUBMIT button on Index
       Map<String,Object> model = new HashMap<>();
@@ -45,25 +46,46 @@ public class App {
       Boolean newLocation = request.queryParams("select_location").equals("new");
 
       if(newRanger||newAnimal||newLocation){ // IF GOING TO FORM PAGE
-        template = "templates/newElements.vtl";
+        // template = "templates/newElements.vtl";
         model.put("newRanger",newRanger);
         model.put("newAnimal",newAnimal);
         model.put("newLocation",newLocation);
-        model.put("rangers", Sighting.readAllRangers());
-        model.put("animals", Animal.readAllExclusive());
-        model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
-        model.put("locations", Sighting.readAllLocations());
-        model.put("Animal", Animal.class);
-        model.put("template", template);
+        // model.put("rangers", Sighting.readAllRangers());
+        // model.put("animals", Animal.readAllExclusive());
+        // model.put("endangeredAnimals", EndangeredAnimal.readAllEndangeredExclusive());
+        // model.put("locations", Sighting.readAllLocations());
+        // model.put("template", template);
+        response.redirect("/sightings/new");
       }
       else{ // IF SUBMITTING DIRECTLY FROM INDEX
-        Sighting newSighting = new Sighting(Animal.readByName(request.queryParams("select_animal")).getId(),request.queryParams("select_location"),request.queryParams("select_ranger"));
+        Animal selectedAnimal = Animal.readByName(request.queryParams("select_animal"));
+        String selectedLocation = request.queryParams("select_location");
+        String selectedRanger = request.queryParams("select_ranger");
+        String selectedHealth = request.queryParams("select_health");
+        String selectedAge = request.queryParams("select_age");
+        Sighting newSighting;
+        if(selectedAnimal.getType().equals(Constants.ENDANGERED)){
+          try{
+            if(selectedHealth == null || selectedHealth.equals("") || selectedAge == null || selectedAge.equals("")){
+              throw new IllegalArgumentException("Endangered Species REQUIRE NEW VALUES for HEALTH and AGE, specific to each sighting");
+            }
+            EndangeredAnimal newEndangeredAnimal = new EndangeredAnimal(selectedAnimal.getName(), selectedHealth, selectedAge);
+            newEndangeredAnimal.create();
+            newSighting = new Sighting(newEndangeredAnimal.getId(),selectedLocation,selectedRanger);
+          }
+          catch(IllegalArgumentException exception){
+            String errorMessage = "ERROR: " + exception.getMessage();
+            return errorMessage;
+          }
+        }
+        else{
+           newSighting = new Sighting(selectedAnimal.getId(),selectedLocation,selectedRanger);
+        }
         newSighting.create();
         response.redirect("/");
       }
-
-      return new ModelAndView(model, layout);
-    },new VelocityTemplateEngine());
+      return "Success!";
+    });
 
     post("/",(request,response)->{
       String newSpeciesName = request.queryParams("input_animal");
@@ -77,7 +99,8 @@ public class App {
           newAnimalId = newEndangeredAnimal.getId();
         }
         catch(IllegalArgumentException exception){
-          return "When attempting to add an endangered species to the database, you MUST include information on the specimen's health and age at the time of sighting";
+          String errorMessage = "ERROR: " + exception.getMessage();
+          return errorMessage;
         }
       }
       else{
@@ -91,7 +114,4 @@ public class App {
       return "Success!";
     });
   }
-
-
-
 }
