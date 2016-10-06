@@ -5,12 +5,11 @@ public class Animal{
   // Member Variables
   protected int id = 0;
   protected String name;
-  protected String type = "unendangered";
+  protected String type = Constants.UNENDANGERED;
 
   // Constructor
   public Animal(String _name){
     name = _name;
-    create();
   }
 
   // Getters
@@ -78,7 +77,7 @@ public class Animal{
   public static List<Animal> readAllExclusive(){
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT id, name, type FROM animals WHERE type = :type")
-        .addParameter("type","unendangered")
+        .addParameter("type",Constants.UNENDANGERED)
         .throwOnMappingFailure(false)
         .executeAndFetch(Animal.class);
     }

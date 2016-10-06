@@ -19,7 +19,6 @@ public class Sighting {
     location = _location;
     ranger_name = _ranger_name;
     time_sighted = new Timestamp(new Date().getTime());
-    create();
   }
 
   // Getters

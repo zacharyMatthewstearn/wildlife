@@ -9,12 +9,12 @@ public class EndangeredAnimal extends Animal {
   // Constructor
   public EndangeredAnimal(String _name, String _health, String _age) {
     super(_name);
-    if(_name == null || _health == null || _age == null || _name.equals("") || _health.equals("") || _age.equals(""))
-      throw new IllegalArgumentException("Endangered Species REQUIRE values for species name, healht, and age");
     setHealth(_health);
     setAge(_age);
-    setType("endangered");
-    update();
+    setType(Constants.ENDANGERED);
+    if(_name == null || _health == null || _age == null || _name.equals("") || _health.equals("") || _age.equals("")){
+      throw new IllegalArgumentException("Endangered Species REQUIRE values for species name, health, and age");
+    }
   }
 
   // Getters
@@ -78,7 +78,7 @@ public class EndangeredAnimal extends Animal {
   public static List<EndangeredAnimal> readAllEndangeredExclusive(){
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery("SELECT * FROM animals WHERE type = :type")
-        .addParameter("type","endangered")
+        .addParameter("type",Constants.ENDANGERED)
         .throwOnMappingFailure(false)
         .executeAndFetch(EndangeredAnimal.class);
     }
